@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CivicFix Smart Infrastructure Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+:root{
+--bg:#f4f6fb;
+--card:#ffffff;
+--text:#1a1a1a;
+--primary:#2d6cdf;
+--danger:#ff4d4d;
+--warning:#ffb020;
+--success:#2ecc71;
+}
+
+body.dark{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#e5e7eb;
+}
+
+body{
+margin:0;
+font-family:Segoe UI;
+background:var(--bg);
+color:var(--text);
+transition:0.3s;
+}
+
+/* HEADER */
+
+header{
+background:linear-gradient(90deg,#1e3a8a,#2563eb);
+color:white;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+header h1{
+margin:0;
+font-size:24px;
+}
+
+.theme-toggle{
+background:white;
+border:none;
+padding:8px 12px;
+border-radius:20px;
+cursor:pointer;
+}
+
+/* GRID */
+
+.container{
+padding:25px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+/* CARDS */
+
+.card{
+background:var(--card);
+border-radius:14px;
+padding:20px;
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+/* STAT CARDS */
+
+.stat{
+font-size:28px;
+font-weight:bold;
+}
+
+.label{
+opacity:0.7;
+}
+
+/* TRAFFIC LIGHTS */
+
+.lights{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.light{
+width:18px;
+height:18px;
+border-radius:50%;
+opacity:0.4;
+}
+
+.red{background:#ff4d4d}
+.yellow{background:#ffb020}
+.green{background:#2ecc71}
+
+.active{
+opacity:1;
+box-shadow:0 0 10px currentColor;
+}
+
+/* ALERT */
+
+.alert{
+background:#bb0909;
+color:white;
+padding:12px;
+border-radius:10px;
+margin-bottom:20px;
+display:none;
+animation:blink 1s infinite alternate;
+}
+
+@keyframes blink{
+from{opacity:0.6}
+to{opacity:1}
+}
+
+/* CATEGORY BUTTONS */
+
+.categories{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:15px;
+}
+
+.cat-btn{
+padding:10px 18px;
+border:none;
+border-radius:20px;
+background:var(--primary);
+color:white;
+cursor:pointer;
+}
+
+.cat-btn:hover{
+opacity:0.9;
+}
+
+/* AI PANEL */
+
+.ai-box{
+border-left:5px solid var(--primary);
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>🏙 CivicFix Admin Control Center</h1>
+
+<button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀</button>
+
+</header>
+
+<div style="padding:25px">
+
+<div class="alert" id="alertBox">
+🚨 New Pothole Reported in Anna Nagar – Priority HIGH
+</div>
+
+<div class="container">
+
+<div class="card">
+<div class="stat">12</div>
+<div class="label">Active Issues</div>
+</div>
+
+<div class="card">
+<div class="stat">5</div>
+<div class="label">Emergency Cases</div>
+</div>
+
+<div class="card">
+<div class="stat">28</div>
+<div class="label">Resolved This Week</div>
+</div>
+
+<div class="card">
+<div class="stat">7</div>
+<div class="label">Locations Monitoring</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h3>🚦 Priority Indicator</h3>
+
+<div class="lights">
+
+<div class="light red active"></div>
+<div class="light yellow"></div>
+<div class="light green"></div>
+
+</div>
+
+<p>Emergency issue detected</p>
+
+</div>
+
+<div class="card ai-box">
+
+<h3>🤖 AI Infrastructure Prediction</h3>
+
+<p><b>Issue:</b> Pothole</p>
+<p><b>Location:</b> Anna Nagar</p>
+<p><b>Risk Level:</b> HIGH</p>
+<p><b>Prediction:</b> Road collapse possible within 48 hours.</p>
+<p><b>Action:</b> Immediate repair required.</p>
+
+</div>
+
+<div class="card">
+
+<h3>📍 Latest Report</h3>
+
+<p><b>Category:</b> Streetlight Failure</p>
+<p><b>Location:</b> T Nagar</p>
+<p><b>Status:</b> Pending Repair</p>
+
+</div>
+
+</div>
+
+<div style="padding:25px">
+
+<div class="card">
+
+<h3>🧭 Infrastructure Categories</h3>
+
+<div class="categories">
+
+<button class="cat-btn" onclick="nav('potholes.html')">Road / Potholes</button>
+
+<button class="cat-btn" onclick="nav('streetlights.html')">Street Lights</button>
+
+<button class="cat-btn" onclick="nav('water.html')">Water Pipeline</button>
+
+<button class="cat-btn" onclick="nav('garbage.html')">Garbage</button>
+
+<button class="cat-btn" onclick="nav('photos.html')">Citizen Reports</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="admin.js"></script>
+
+<script>
+
+/* LOAD SAVED THEME */
+
+window.onload = function(){
+
+let savedTheme = localStorage.getItem("theme")
+
+if(savedTheme === "dark"){
+document.body.classList.add("dark")
+}
+
+}
+
+/* TOGGLE THEME */
+
+function toggleTheme(){
+
+document.body.classList.toggle("dark")
+
+if(document.body.classList.contains("dark")){
+localStorage.setItem("theme","dark")
+}else{
+localStorage.setItem("theme","light")
+}
+
+}
+
+/* PAGE NAVIGATION */
+
+function nav(page){
+window.location.href = page;
+}
+
+/* SIMULATED ALERT */
+
+setTimeout(()=>{
+document.getElementById("alertBox").style.display="block";
+},2000);
+
+</script>
+
+</body>
+</html>

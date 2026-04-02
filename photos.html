@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>CivicFix Citizen Reporting</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+font-family:Segoe UI;
+margin:0;
+background:linear-gradient(135deg,#0f172a,#1e3a8a);
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+background:#1e293b;
+padding:30px;
+border-radius:16px;
+width:400px;
+box-shadow:0 20px 40px rgba(0,0,0,0.4);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+label{
+font-size:14px;
+}
+
+input,select{
+width:100%;
+padding:8px;
+margin-top:6px;
+margin-bottom:14px;
+border-radius:8px;
+border:none;
+}
+
+button{
+width:100%;
+padding:10px;
+border:none;
+border-radius:8px;
+background:#2d6cdf;
+color:white;
+font-size:15px;
+cursor:pointer;
+margin-top:8px;
+}
+
+.voiceBtn{
+background:#10b981;
+}
+
+.preview{
+margin-top:10px;
+text-align:center;
+}
+
+.preview img{
+max-width:100%;
+border-radius:10px;
+}
+
+.result{
+margin-top:15px;
+padding:10px;
+border-radius:10px;
+background:#0f172a;
+}
+
+.high{color:#ff4d4d}
+.medium{color:#ffb020}
+.low{color:#2ecc71}
+
+.location{
+font-size:13px;
+margin-top:10px;
+opacity:0.8;
+}
+
+</style>
+
+</head>
+
+<body>
+    
+<div class="container">
+
+<h2>Report Infrastructure Issue</h2>
+
+<button onclick="goBack()">⬅ Back to Dashboard</button>
+
+<label>Issue Category</label>
+<select id="category">
+<option>Pothole</option>
+<option>Streetlight</option>
+<option>Water Leakage</option>
+<option>Garbage Overflow</option>
+</select>
+
+<label>Upload Image</label>
+<input type="file" id="imageUpload">
+
+<div class="preview">
+<img id="previewImg">
+</div>
+
+<label>Description</label>
+<input type="text" id="desc" placeholder="Type or use voice to describe the issue">
+
+<button class="voiceBtn" onclick="startVoice()">🎤 Speak Description</button>
+
+<button onclick="detectAI()">Run AI Detection</button>
+
+<div id="aiResult" class="result" style="display:none"></div>
+
+<button onclick="submitReport()">Submit Report</button>
+
+<div id="locationText" class="location"></div>
+
+</div>
+
+
+<script>
+
+let priority="LOW"
+let confidence=0
+
+// IMAGE PREVIEW
+document.getElementById("imageUpload").addEventListener("change",function(e){
+
+let reader=new FileReader()
+
+reader.onload=function(){
+document.getElementById("previewImg").src=reader.result
+}
+
+reader.readAsDataURL(e.target.files[0])
+
+})
+
+
+// AI DETECTION SIMULATION
+function detectAI(){
+
+let category=document.getElementById("category").value
+
+confidence=(Math.random()*20+80).toFixed(2)
+
+if(category==="Pothole") priority="HIGH"
+else if(category==="Water Leakage") priority="HIGH"
+else if(category==="Streetlight") priority="MEDIUM"
+else priority="LOW"
+
+let colorClass="low"
+
+if(priority==="HIGH") colorClass="high"
+if(priority==="MEDIUM") colorClass="medium"
+
+document.getElementById("aiResult").style.display="block"
+
+document.getElementById("aiResult").innerHTML=
+
+`AI Detection Result <br><br>
+
+Issue: ${category} <br>
+
+Priority: <span class="${colorClass}">${priority}</span> <br>
+
+AI Confidence: ${confidence}%`
+
+}
+
+
+// LOCATION + SAVE REPORT
+function submitReport(){
+
+navigator.geolocation.getCurrentPosition(function(pos){
+
+let report={
+
+category:document.getElementById("category").value,
+
+desc:document.getElementById("desc").value,
+
+priority:priority,
+
+confidence:confidence,
+
+lat:pos.coords.latitude,
+
+lng:pos.coords.longitude,
+
+status:"Pending"
+
+}
+
+let reports=JSON.parse(localStorage.getItem("reports")||"[]")
+
+reports.push(report)
+
+localStorage.setItem("reports",JSON.stringify(reports))
+
+// SHOW USER LOCATION
+let lat=pos.coords.latitude
+let lng=pos.coords.longitude
+
+document.getElementById("locationText").innerHTML=
+"Your Location: Latitude "+lat.toFixed(3)+" , Longitude "+lng.toFixed(3)
+
+alert("Report Submitted Successfully!")
+
+// RESET FORM
+document.getElementById("category").value="Pothole"
+document.getElementById("desc").value=""
+document.getElementById("imageUpload").value=""
+document.getElementById("previewImg").src=""
+document.getElementById("aiResult").style.display="none"
+
+priority="LOW"
+confidence=0
+
+})
+
+}
+
+
+// BACK BUTTON
+function goBack(){
+window.location.href="admin.html"
+}
+
+
+// VOICE INPUT
+function startVoice() {
+
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)()
+
+recognition.lang = "en-IN"
+
+recognition.start()
+
+recognition.onresult = function(event) {
+
+const speechText = event.results[0][0].transcript
+
+document.getElementById("desc").value = speechText
+
+}
+
+recognition.onerror = function(){
+alert("Voice recognition error. Please try again.")
+}
+
+}
+
+</script>
+
+</body>
+</html>

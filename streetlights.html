@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title><h1>Streetlight Reports</h1></title>
+
+<style>
+
+:root{
+--bg:#f4f6fb;
+--card:#ffffff;
+--text:#111;
+--primary:#2d6cdf;
+}
+
+body.dark{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#e5e7eb;
+}
+
+body{
+margin:0;
+font-family:Segoe UI;
+background:var(--bg);
+color:var(--text);
+transition:0.3s;
+}
+
+/* HEADER */
+
+header{
+background:linear-gradient(90deg,#1e3a8a,#2563eb);
+color:white;
+padding:18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.back{
+background:white;
+border:none;
+padding:8px 14px;
+border-radius:20px;
+cursor:pointer;
+}
+
+/* GRID */
+
+.container{
+padding:25px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;
+}
+
+/* CARD */
+
+.card{
+background:var(--card);
+border-radius:14px;
+padding:18px;
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* PRIORITY COLORS */
+
+.priority{
+padding:5px 10px;
+border-radius:10px;
+font-size:12px;
+color:white;
+}
+
+.high{background:#ff4d4d}
+.medium{background:#ffb020}
+.low{background:#2ecc71}
+
+/* IMAGE */
+
+img{
+width:100%;
+border-radius:10px;
+margin-top:10px;
+}
+
+/* BUTTONS */
+
+.btns{
+margin-top:10px;
+}
+
+button.action{
+border:none;
+padding:7px 10px;
+border-radius:8px;
+margin-right:6px;
+cursor:pointer;
+}
+
+.pending{background:#ffb020}
+.progress{background:#2d6cdf;color:white}
+.resolved{background:#2ecc71;color:white}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<button class="back" onclick="goBack()">⬅ Back</button>
+
+<h1>Streetlight Reports</h1>
+
+<button onclick="toggleTheme()">🌙</button>
+
+</header>
+
+
+<div class="container">
+
+<div class="card">
+
+<h3>Adyar</h3>
+
+<span class="priority high">HIGH</span>
+
+<p>Status: Pending Repair</p>
+
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDRDrVxOiMYQy--8BV1icubbJW1GYexZi3oA&s">
+
+<div class="btns">
+<button class="action pending">Pending</button>
+<button class="action progress">In Progress</button>
+<button class="action resolved">Resolved</button>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>Besant Nagar</h3>
+
+<span class="priority medium">MEDIUM</span>
+
+<p>Status: In Progress</p>
+
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_vrU6dY7Lm1KlbfR0-V3OaD6Ocwz-3Ry1nQ&s">
+
+<div class="btns">
+<button class="action pending">Pending</button>
+<button class="action progress">In Progress</button>
+<button class="action resolved">Resolved</button>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>Nungambakkam</h3>
+
+<span class="priority low">LOW</span>
+
+<p>Status: Reported</p>
+
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcWuS_yG-J0fGYrALoZYDLvmNZaVmVbpzaDQ&s">
+
+<div class="btns">
+<button class="action pending">Pending</button>
+<button class="action progress">In Progress</button>
+<button class="action resolved">Resolved</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+window.onload = function(){
+
+let savedTheme = localStorage.getItem("theme")
+
+if(savedTheme === "dark"){
+document.body.classList.add("dark")
+}
+
+}
+
+function toggleTheme(){
+document.body.classList.toggle("dark")
+
+if(document.body.classList.contains("dark")){
+localStorage.setItem("theme","dark")
+}else{
+localStorage.setItem("theme","light")
+}
+
+}
+
+</script>
+</body>
+<script src="admin.js"></script>
+</html>
